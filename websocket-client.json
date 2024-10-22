@@ -1,0 +1,68 @@
+{
+    "asyncapi": "2.2.0",
+    "info": {
+      "title": "Website WebSocket Client",
+      "version": "1.0.0"
+    },
+    "servers": {
+      "websiteWebSocketServer": {
+        "url": "ws://mycompany.com/ws",
+        "protocol": "ws"
+      }
+    },
+    "channels": {
+      "like/comment": {
+        "description": "Notify the backend that a comment has been liked.",
+        "subscribe": {
+          "message": {
+            "description": "Message that is being sent when someone wants to like a comment.",
+            "payload": {
+              "type": "object",
+              "title": "likeCommentPayload",
+              "additionalProperties": false,
+              "properties": {
+                "commentId": {
+                  "allOf": [
+                    { "type": "string" },
+                    { "description": "Id of the comment that should be liked" }
+                  ]
+                },
+                "likedBy": {
+                  "allOf": [
+                    { "type": "string" },
+                    { "description": "The id of the user that have liked the comment" }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "update/comment/likes": {
+        "description": "Update the UI when the comment likes count is updated.",
+        "publish": {
+          "message": {
+            "description": "Message that is being sent when a comment have been updated.",
+            "payload": {
+              "type": "object",
+              "title": "updateCommentLikesPayload",
+              "additionalProperties": false,
+              "properties": {
+                "commentId": {
+                  "allOf": [
+                    { "type": "string" },
+                    { "description": "Id of the comment that was changed, such as when someone liked it." }
+                  ]
+                },
+                "likeCount": {
+                  "type": "integer",
+                  "description": "The new like count of how many have liked the comment."
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+}
+  

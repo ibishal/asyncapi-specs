@@ -1,0 +1,42 @@
+{
+    "asyncapi": "2.2.0",
+    "info": {
+      "title": "Notifications Service",
+      "version": "1.0.0"
+    },
+    "servers": {
+      "mosquitto": {
+        "url": "mqtt://test.mosquitto.org",
+        "protocol": "mqtt",
+        "bindings": {
+          "mqtt": {
+            "clientId": "notification-service"
+          }
+        }
+      }
+    },
+    "channels": {
+      "comment/liked": {
+        "description": "When a 'comment has been liked' message is received, it sends an SMS or push notification to the author.",
+        "publish": {
+          "message": {
+            "description": "Message that is being sent when a comment has been liked by someone.",
+            "payload": {
+              "type": "object",
+              "title": "commentLikedPayload",
+              "additionalProperties": false,
+              "properties": {
+                "commentId": {
+                  "allOf": [
+                    { "type": "string" },
+                    { "description": "Id of the comment that was liked" }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  

@@ -1,0 +1,73 @@
+{
+    "asyncapi": "2.2.0",
+    "info": {
+      "title": "Comments Service",
+      "version": "1.0.0",
+      "description": "This service is in charge of processing all the events related to comments."
+    },
+    "servers": {
+      "mosquitto": {
+        "url": "mqtt://test.mosquitto.org",
+        "protocol": "mqtt",
+        "bindings": {
+          "mqtt": {
+            "clientId": "comment-service"
+          }
+        }
+      }
+    },
+    "channels": {
+      "comment/liked": {
+        "description": "Updates the likes count in the database and sends the new count to the broker.",
+        "publish": {
+          "message": {
+            "description": "Message that is being sent when a comment has been liked by someone.",
+            "payload": {
+              "type": "object",
+              "title": "commentLikedPayload",
+              "additionalProperties": false,
+              "properties": {
+                "commentId": {
+                  "allOf": [
+                    { "type": "string" },
+                    { "description": "Id of the comment that was liked" }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "comment/{commentId}/changed": {
+        "description": "Sends the new count to the broker after it has been updated in the database.",
+        "parameters": {
+          "commentId": {
+            "schema": { "type": "string" }
+          }
+        },
+        "subscribe": {
+          "message": {
+            "description": "Message that is being sent when a comment has been updated.",
+            "payload": {
+              "type": "object",
+              "title": "commentChangedPayload",
+              "additionalProperties": false,
+              "properties": {
+                "commentId": {
+                  "allOf": [
+                    { "type": "string" },
+                    { "description": "Id of the comment that was changed, such as when someone liked it." }
+                  ]
+                },
+                "likeCount": {
+                  "type": "integer",
+                  "description": "The new like count of how many have liked the comment."
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  
